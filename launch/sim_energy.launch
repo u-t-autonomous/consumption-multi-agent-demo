@@ -1,0 +1,69 @@
+<launch>
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="zeroth_tb3" default="tb3_0"/>
+  <arg name="first_tb3" default="tb3_1"/>
+  <arg name="second_tb3"  default="tb3_2"/>
+
+  <arg name="zeroth_tb3_x_pos" default=" -4.5"/>
+  <arg name="zeroth_tb3_y_pos" default=" 4.5"/>
+  <arg name="zeroth_tb3_z_pos" default=" 0.0"/>
+  <arg name="zeroth_tb3_yaw"   default=" 0.0"/>
+
+  <arg name="first_tb3_x_pos" default=" -6.5"/>
+  <arg name="first_tb3_y_pos" default=" 0.5"/>
+  <arg name="first_tb3_z_pos" default=" 0.0"/>
+  <arg name="first_tb3_yaw"   default=" 0.0"/>
+
+  <arg name="second_tb3_x_pos" default=" 6.5"/>
+  <arg name="second_tb3_y_pos" default=" -5.5"/>
+  <arg name="second_tb3_z_pos" default=" 0.0"/>
+  <arg name="second_tb3_yaw"   default=" 0.0"/>
+
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find consumption-multi-agent-demo)/worlds/energy_constrained.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>t
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>  
+
+  <group ns = "$(arg zeroth_tb3)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="$(arg zeroth_tb3)" />
+    </node>
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-sdf -model $(arg zeroth_tb3) -x $(arg zeroth_tb3_x_pos) -y $(arg zeroth_tb3_y_pos) -z $(arg zeroth_tb3_z_pos) -Y $(arg zeroth_tb3_yaw) -file $(find consumption-multi-agent-demo)/models/turtlebot3_burger_red/model.sdf" />
+  </group>
+
+  <group ns = "$(arg first_tb3)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+    
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="$(arg first_tb3)" />
+    </node>
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-sdf -model $(arg first_tb3) -x $(arg first_tb3_x_pos) -y $(arg first_tb3_y_pos) -z $(arg first_tb3_z_pos) -Y $(arg first_tb3_yaw) -file $(find consumption-multi-agent-demo)/models/turtlebot3_burger_green/model.sdf" />
+  </group>
+
+  <group ns = "$(arg second_tb3)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+    
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="$(arg second_tb3)" />
+    </node>
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-sdf -model $(arg second_tb3) -x $(arg second_tb3_x_pos) -y $(arg second_tb3_y_pos) -z $(arg second_tb3_z_pos) -Y $(arg second_tb3_yaw) -file $(find consumption-multi-agent-demo)/models/turtlebot3_burger_blue/model.sdf" />
+  </group>
+
+  <include file="$(find consumption-multi-agent-demo)/src/energy_robot_0.py"/>
+  <include file="$(find consumption-multi-agent-demo)/src/energy_robot_1.py"/>
+  <include file="$(find consumption-multi-agent-demo)/src/energy_robot_2.py"/>
+
+</launch>
