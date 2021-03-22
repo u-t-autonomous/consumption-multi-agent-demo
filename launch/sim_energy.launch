@@ -62,8 +62,8 @@
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-sdf -model $(arg second_tb3) -x $(arg second_tb3_x_pos) -y $(arg second_tb3_y_pos) -z $(arg second_tb3_z_pos) -Y $(arg second_tb3_yaw) -file $(find consumption-multi-agent-demo)/models/turtlebot3_burger_blue/model.sdf" />
   </group>
 
-  <include file="$(find consumption-multi-agent-demo)/src/energy_robot_0.py"/>
-  <include file="$(find consumption-multi-agent-demo)/src/energy_robot_1.py"/>
-  <include file="$(find consumption-multi-agent-demo)/src/energy_robot_2.py"/>
+<!--   <node name="robot_0" pkg="consumption-multi-agent-demo" type="energy_robot_0.py"/>
+  <node name="robot_1" pkg="consumption-multi-agent-demo" type="energy_robot_1.py"/>
+  <node name="robot_2" pkg="consumption-multi-agent-demo" type="energy_robot_2.py"/> -->
 
 </launch>

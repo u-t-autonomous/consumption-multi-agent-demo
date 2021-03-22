@@ -1,4 +1,4 @@
-#! /usr/bin/env/ python2
+#!/usr/bin/env/ python
 
 # Imports for ROS side
 import rospy

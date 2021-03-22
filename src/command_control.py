@@ -1,8 +1,8 @@
-#! /usr/bin/env/ python2
+#!/usr/bin/env/ python2
 
 ''' Module for setting up command and control using ROS topics '''
 
-from Safety_and_Attention.msg import Ready
+from custom_msgs.msg import Ready
 from std_msgs.msg import Bool
 import rospy
 import time
