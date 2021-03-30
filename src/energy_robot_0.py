@@ -225,21 +225,29 @@ if __name__ == '__main__':
     rdy.set_ready(True)
     rdy.wait_for_ready()
 
-    # traj_np = np.load('some_traj_file.npy') # <------ CHANGE THIS
 
     # test traj
-    init_pose = Point(-4.5, 4.5, None) # <----- Initial position set in launch file
+    init_pose = Point(-3.5, 6.5, None) # <----- Initial position set in launch file
     traj_np = test_trajectory(init_pose)
-    
+    traj_np = np.load('robot0_traj.npy') # <------ CHANGE THIS
+    trajectory_counter=0
+    print(init_pose)
     # Now, while we have not reached the target point, continue executing the controller
     while not rospy.is_shutdown():
-        for next_p in traj_np:
-            print("Robot {} is moving to the next waypoint *".format(int(robot_name[-1])))
-            rdy.set_ready(False)
-            next_x = next_p[0]
-            next_y = next_p[1]
-            next_point = Point(next_x, next_y, None)
-            vel_controller_0.go_to_point(next_point)
-            rdy.set_ready(True)
-            # Waiting for all agents to reach their waypoint to engforce synchronization
-            rdy.wait_for_ready()
+
+        #for next_p in traj_np:
+        print("Robot {} is moving to the next waypoint *".format(int(robot_name[-1])))
+        rdy.set_ready(False)
+        next_x = traj_np[trajectory_counter,0]
+        next_y = traj_np[trajectory_counter,1]
+        print(next_x,next_y,"robot0")
+        next_point = Point(next_x, next_y, None)
+        vel_controller_0.go_to_point(next_point)
+        rdy.set_ready(True)
+        # Waiting for all agents to reach their waypoint to engforce synchronization
+        rdy.wait_for_ready()
+        trajectory_counter +=1
+        if trajectory_counter==np.shape(traj_np)[0]:
+            trajectory_counter=0
+
+
